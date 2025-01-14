@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.3",
+        "easycorp/easyadmin-bundle": "^4.21",
         "phpdocumentor/reflection-docblock": "^5.6",
         "phpstan/phpdoc-parser": "^2.0",
         "symfony/asset": "7.2.*",
@@ -43,6 +44,7 @@
         "symfony/web-link": "7.2.*",
         "symfony/yaml": "7.2.*",
         "twig/extra-bundle": "^2.12|^3.0",
+        "twig/intl-extra": "^3.18",
         "twig/twig": "^2.12|^3.0"
     },
     "config": {

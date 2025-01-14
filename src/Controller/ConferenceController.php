@@ -22,11 +22,20 @@ final class ConferenceController extends AbstractController
     }
 
     #[Route('/conference/{id}', name: 'conference')]
-    public function show(Conference $conference, CommentRepository $commentRepository): Response
+    public function show(
+        Conference $conference,
+        CommentRepository $commentRepository,
+        #[MapQueryParameter(options: ['min_range' => 0])]
+        int $offset = 0,
+    ): Response
     {
+        $paginator = $commentRepository->getCommentPaginator($conference, $offset);
+
         return $this->render('conference/show.html.twig', [
             'conference' => $conference,
-            'comments' => $commentRepository->findBy(['conference' => $conference], ['createdAt' => 'DESC']),
+            'comments' => $paginator,
+            'previous' => $offset - CommentRepository::COMMENTS_PER_PAGE,
+            'next' => min(count($paginator), $offset + CommentRepository::COMMENTS_PER_PAGE),
         ]);
     }
 }

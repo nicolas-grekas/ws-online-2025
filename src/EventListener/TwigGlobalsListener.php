@@ -1,15 +1,17 @@
 <?php
 
-namespace App\EventSubscriber;
+namespace App\EventListener;
 
 use App\Entity\Conference;
 use App\Repository\ConferenceRepository;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 
-class AppSubscriber implements EventSubscriberInterface
+#[AsEventListener]
+class TwigGlobalsListener
 {
     public function __construct(
         private Environment $twig,
@@ -17,15 +19,8 @@ class AppSubscriber implements EventSubscriberInterface
     ) {        
     }
 
-    public function onKernelRequest(RequestEvent $event): void
+    public function __invoke(RequestEvent $event): void
     {
         $this->twig->addGlobal('conferences', $this->conferenceRepository->findAll());
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            KernelEvents::REQUEST => 'onKernelRequest',
-        ];
     }
 }

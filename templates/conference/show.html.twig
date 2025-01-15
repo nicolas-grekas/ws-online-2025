@@ -35,9 +35,11 @@
 
     <h2>Add your own feedback</h2>
 
-    <div id="comment-form">
-    {{ form(comment_form) }}
-    </div>
+    {% block comment_form %}
+        <div id="comment-form">
+        {{ form(comment_form) }}
+        </div>
+    {% endblock %}
 {% endblock %}
 
 {% block comment_stream %}
@@ -49,9 +51,7 @@
 
 <turbo-stream action="replace" target="comment-form">
     <template>
-        <div id="comment-form">
-        {{ form(comment_form) }}
-        </div>
+        {{ block('comment_form') }}
     </template>
 </turbo-stream>
 {% endblock %}

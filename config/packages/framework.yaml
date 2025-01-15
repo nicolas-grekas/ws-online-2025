@@ -6,7 +6,7 @@ framework:
     session:
         handler_id: '%env(resolve:DATABASE_URL)%'
 
-    #esi: true
+    esi: true
     #fragments: true
 
 when@test:
@@ -14,3 +14,7 @@ when@test:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
+
+when@dev:
+    framework:
+        http_cache: true

@@ -12,7 +12,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -21,13 +23,10 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ConferenceController extends AbstractController
 {
     public function __construct(
-        #[AutowireIterator(CalculationInterface::class)]
-        private iterable $calculations
+        #[Autowire(param: 'photo_dir')]
+        private string $photoDir,
     )
     {
-        foreach ($this->calculations as $calculation) {
-            dump([$calculation::class => $calculation->calculate()]);
-        }
     }
 
     #[Route('/', name: 'homepage')]
@@ -57,6 +56,13 @@ final class ConferenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setConference($conference);
 
+            if ($photo = $form['photo']->getData()) {
+                /** @var UploadedFile $photo */
+                $filename = bin2hex(random_bytes(6)).'.'.$photo->guessExtension();
+                $photo->move($this->photoDir, $filename);
+                $comment->setPhotoFilename($filename);
+            }
+                
             $entityManager->persist($comment);
             $entityManager->flush();
 

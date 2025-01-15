@@ -42,6 +42,7 @@
         "symfony/ux-turbo": "^2.22",
         "symfony/validator": "7.2.*",
         "symfony/web-link": "7.2.*",
+        "symfony/workflow": "7.2.*",
         "symfony/yaml": "7.2.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/intl-extra": "^3.18",
@@ -94,6 +95,14 @@
             "symfony console doctrine:migrations:migrate -n --env=test @no_additional_args",
             "symfony console doctrine:fixtures:load -n --env=test @no_additional_args",
             "symfony run bin/phpunit"
+        ],
+        "start": [
+            "symfony server:start -d",
+            "symfony run -d --watch=config,src,templates,vendor/composer/installed.json symfony console messenger:consume async -vv",
+            "symfony open:local"
+        ],
+        "stop": [
+            "symfony server:stop"
         ]
     },
     "conflict": {

@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller;
 
+use App\Repository\CommentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Panther\PantherTestCase;
 
@@ -28,6 +30,11 @@ class ConferenceControllerTest extends PantherTestCase
             'comment[photo]' => dirname(__DIR__, 2).'/public/images/under-construction.gif',
         ]);
         $this->assertResponseRedirects();
+
+        $comment = static::getContainer()->get(CommentRepository::class)->findOneBy(['email' => 'me@automat.ed']);
+        $comment->setState('published');
+        static::getContainer()->get(EntityManagerInterface::class)->flush();
+
         $client->followRedirect();
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('div:contains("There are 2 comments")');

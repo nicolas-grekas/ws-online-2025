@@ -19,7 +19,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $conference = new Conference();
-        $conference->setCity('Paris');
+        $conference->setCity('Amsterdam');
         $conference->setYear('2019');
         $conference->setIsInternational(false);
         $manager->persist($conference);

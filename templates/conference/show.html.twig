@@ -5,6 +5,8 @@
 {% block body %}
     <h2>{{ conference }} Conference</h2>
 
+    <div id="flash-box"></div>
+
     {% if comments|length > 0 %}
         <div>There are {{ comments|length }} comments.</div>
 
@@ -33,5 +35,23 @@
 
     <h2>Add your own feedback</h2>
 
+    <div id="comment-form">
     {{ form(comment_form) }}
+    </div>
+{% endblock %}
+
+{% block comment_stream %}
+<turbo-stream action="replace" target="flash-box">
+    <template>
+        <div id="flash-box">Thank you for your feedback! Review in process.</div>
+    </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="comment-form">
+    <template>
+        <div id="comment-form">
+        {{ form(comment_form) }}
+        </div>
+    </template>
+</turbo-stream>
 {% endblock %}
